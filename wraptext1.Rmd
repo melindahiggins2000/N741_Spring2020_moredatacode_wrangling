@@ -1,0 +1,20 @@
+---
+title: "wrap long text"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Wrap long lines
+ 
+Long lines in the output will not be (hard-)wrapped automatically unless you break them manually.
+
+```{r long_output}
+a <- '## "stx2A; shiga-like toxin II A subunit encoded by bacteriophage BP-933W; K11006 shiga toxin subunit A" '
+a
+```
+

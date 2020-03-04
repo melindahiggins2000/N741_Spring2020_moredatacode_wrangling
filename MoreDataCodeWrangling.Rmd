@@ -1,0 +1,91 @@
+---
+title: "More Data Code Wrangling"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# set up knitr options for all code chunks
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error = FALSE)
+
+# Load Packages ----
+library(readr)
+library(tibble)
+library(dplyr)
+library(ggplot2)
+
+# Import data ----
+# import abalone.csv dataset
+# use read_csv() function from readr to import data
+abalone <- read_csv(file = "abalone.csv")
+```
+
+## Descriptive Data
+
+```{r}
+# Descriptive data ----
+# descriptive stats for selected variables
+abalone %>% 
+  select(length, diameter, height) %>% 
+  summary()
+```
+
+## Saving the output and printing 
+
+```{r}
+# save stats
+stats1 <- abalone %>% 
+  select(length, diameter, height) %>% 
+  summary()
+stats1
+```
+
+## longer output can be transposed
+
+```{r}
+# specific stats
+stats2 <- abalone %>%
+  select(length, diameter, height) %>%
+  summarise_all(list(min = min, 
+                     max = max, 
+                     mean = mean, 
+                     sd = sd), na.rm=TRUE)
+
+# print out transpose
+t(stats2)
+```
+
+## Grouped output
+
+```{r}
+# stats by group
+# note - this does not work with summary()
+stats3 <- abalone %>%
+  select(sex, wholeWeight, shuckedWeight) %>%
+  group_by(sex) %>%
+  summarise_all(list(min = min, 
+                     max = max, 
+                     mean = mean, 
+                     sd = sd), na.rm=TRUE)
+t(stats3)
+
+```
+
+## Other packages with descriptive data functions
+
+The `psych` package has a nice `describe()` function - which only works for numeric data
+
+```{r}
+library(psych)
+psych::describe(abalone)
+```
+
+The `Hmisc` package also has a `describe()` function that works with numeric and categorical data
+
+```{r}
+library(Hmisc)
+Hmisc::describe(abalone)
+```
+

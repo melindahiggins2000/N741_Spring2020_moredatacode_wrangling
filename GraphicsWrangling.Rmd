@@ -1,0 +1,64 @@
+---
+title: "Graphics Wrangling"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+# set up knitr options for all code chunks
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error = FALSE)
+
+# Load Packages ----
+library(readr)
+library(tibble)
+library(dplyr)
+library(ggplot2)
+
+# Import data ----
+# import abalone.csv dataset
+# use read_csv() function from readr to import data
+abalone <- read_csv(file = "abalone.csv")
+```
+
+## Scatterplot Matrices
+
+### Try the `car` package
+
+```{r}
+# Scatterplot Matrices from the car Package
+library(car)
+scatterplotMatrix(~rings + length + height + diameter, 
+                   data=abalone,
+                   main="Abalone Rings and Dimensions")
+```
+
+Run again by `sex` group
+
+```{r}
+scatterplotMatrix(~rings + length + height + diameter | sex, 
+                   data=abalone,
+                   main="Abalone Rings and Dimensions")
+```
+
+### Try to `GGally` package
+
+```{r}
+library(GGally)
+abalone %>% 
+  select(rings, wholeWeight, shellWeight) %>%
+  GGally::ggpairs()
+```
+
+### and add by `sex` group
+
+```{r}
+# Make ggpairs plot again color by sex
+abalone %>% 
+  select(rings, wholeWeight, shellWeight, sex) %>%
+  GGally::ggpairs(aes(color = sex))
+```
+

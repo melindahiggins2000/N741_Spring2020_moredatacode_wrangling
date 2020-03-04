@@ -1,0 +1,67 @@
+---
+title: "More Data Code Wrangling - add `printr`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# set up knitr options for all code chunks
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(error = FALSE)
+
+# add printr package
+# automatic table formatting better
+library(printr)
+
+# Load Packages ----
+library(readr)
+library(tibble)
+library(dplyr)
+library(ggplot2)
+
+# Import data ----
+# import abalone.csv dataset
+# use read_csv() function from readr to import data
+abalone <- read_csv(file = "abalone.csv")
+```
+
+## Descriptive Data - other packages
+
+Learn more at [http://thatdatatho.com/2018/08/20/easily-create-descriptive-summary-statistic-tables-r-studio/](http://thatdatatho.com/2018/08/20/easily-create-descriptive-summary-statistic-tables-r-studio/).
+
+### Let's look at the `table1` package - for HTML tables
+
+The package vignette is [https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html](https://cran.r-project.org/web/packages/table1/vignettes/table1-examples.html)
+
+```{r}
+library(table1)
+table1::label(abalone$shuckedWeight) <- "Shucked Weight"
+table1::label(abalone$visceraWeight) <- "Viscera Weight"
+table1::label(abalone$shellWeight) <- "Shell Weight"
+ 
+table1::table1(~shuckedWeight + visceraWeight + shellWeight | sex, data = abalone)
+```
+
+### try the `tableone` package
+
+See package vignette [https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html](https://cran.r-project.org/web/packages/tableone/vignettes/introduction.html)
+
+```{r}
+library(tableone)
+CreateTableOne(data = abalone)
+```
+
+### and try the `arsenal` package
+
+See more at [https://eheinzen.github.io/arsenal/articles/tableby.html](https://eheinzen.github.io/arsenal/articles/tableby.html)
+
+**NOTE**: We have to add `results="asis"` to the code chunk options for this to look pretty in the output.
+
+```{r results="asis"}
+library(arsenal)
+table_one <- tableby(sex ~ ., data = abalone)
+summary(table_one, title = "Abalone Data")
+```
+
+
